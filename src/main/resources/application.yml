@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: sincronizacao-receita
+
+server:
+  port: 8081
