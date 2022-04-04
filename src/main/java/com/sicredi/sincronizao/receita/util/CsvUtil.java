@@ -34,7 +34,7 @@ public class CsvUtil {
             csvWriter.writeNext(headerRecord);
 
             contas.forEach(conta -> {
-                String contaFormatada = ReceitaUtil.formataConta(conta.getConta());
+                String contaFormatada = ReceitaUtil.adicionaTracoConta(conta.getConta());
                 String saldoFormatado = ReceitaUtil.formataSaldo(conta.getSaldo());
                 csvWriter.writeNext(new String[]{conta.getAgencia(), contaFormatada, saldoFormatado,
                         conta.getStatus(), conta.getSincronizado().toString()});
@@ -45,31 +45,38 @@ public class CsvUtil {
         }
     }
 
-    public static List<Conta> converteCsv(String caminhoArquivo) throws IOException, CsvException {
+    public static List<Conta> converteCsv(String caminhoArquivo) {
 
-        Reader reader = new FileReader(caminhoArquivo);
+        try {
+            Reader reader = new FileReader(caminhoArquivo);
 
-        CSVReader csvReader = new CSVReaderBuilder(reader)
-                .withCSVParser(new CSVParserBuilder().withSeparator(';').build())
-                .withSkipLines(1)
-                .build();
+            CSVReader csvReader = new CSVReaderBuilder(reader)
+                    .withCSVParser(new CSVParserBuilder().withSeparator(';').build())
+                    .withSkipLines(1)
+                    .build();
 
-        List<Conta> contas = new ArrayList<>();
-        for (String[] row : csvReader.readAll()) {
-            for (String cell : row) {
-                log.info(cell);
-                String[] split = cell.split(";");
-                Conta conta = Conta.builder()
-                        .agencia(split[0])
-                        .conta(split[1].replace("-", ""))
-                        .saldo(Double.parseDouble(split[2].replace(",", ".")))
-                        .status(split[3])
-                        .build();
-                contas.add(conta);
+            List<Conta> contas = new ArrayList<>();
+            for (String[] row : csvReader.readAll()) {
+                for (String cell : row) {
+                    log.info(cell);
+                    String[] split = cell.split(";");
+                    Conta conta = Conta.builder()
+                            .agencia(split[0])
+                            .conta(ReceitaUtil.removeTracoConta(split[1]))
+                            .saldo(Double.parseDouble(split[2].replace(",", ".")))
+                            .status(split[3])
+                            .build();
+                    contas.add(conta);
+                }
             }
+            log.info(contas.toString());
+            return contas;
+        } catch (IOException | CsvException exception) {
+            log.info(exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
         }
-        log.info(contas.toString());
 
-        return contas;
+
+
     }
 }

@@ -3,14 +3,18 @@ package com.sicredi.sincronizao.receita.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ReceitaUtilTest {
 
     @Test
-    void formataConta() {
-        String conta = ReceitaUtil.formataConta("122256");
+    void adicionaTracoConta() {
+        String conta = ReceitaUtil.adicionaTracoConta("122256");
         Assertions.assertEquals("12225-6", conta);
+    }
+
+    @Test
+    void removeTracoConta() {
+        String conta = ReceitaUtil.removeTracoConta("12225-6");
+        Assertions.assertEquals("122256", conta);
     }
 
     @Test
