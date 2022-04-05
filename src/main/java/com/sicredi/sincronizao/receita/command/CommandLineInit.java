@@ -37,7 +37,7 @@ public class CommandLineInit {
                             boolean resultado = receitaService.atualizarConta(conta.getAgencia(), conta.getConta(),
                                     conta.getSaldo(), conta.getStatus());
                             conta.setSincronizado(resultado);
-                        } catch (InterruptedException e) {
+                        } catch (InterruptedException | RuntimeException e) {
                             log.error("Erro ao atualizar conta -> {}", e.getMessage());
                             conta.setSincronizado(false);
                         }

@@ -16,18 +16,27 @@ class CsvUtilTest {
     @Test
     void converteCsvParaContas() {
 
-        String fileName = "src/test/resources/static/contas.csv";
+        String caminhoArquivo = "src/test/resources/static/contas.csv";
         Conta contaA = Conta.builder().agencia("0101").conta("122256").saldo(100.00).status("A").build();
         Conta contaP = Conta.builder().agencia("0203").conta("122278").saldo(3200.50).status("P").build();
         List<Conta> contasEsperadas = List.of(contaA, contaP);
 
-        List<Conta> contas = CsvUtil.converteCsvParaContas(fileName);
+        List<Conta> contas = CsvUtil.converteCsvParaContas(caminhoArquivo);
 
         Assertions.assertNotNull(contas);
         assertEquals(2, contas.size());
         assertEquals(contasEsperadas, contas);
 
     }
+
+    @Test
+    void DeveLancarExcecaoQuandoNaoEncontrarArquivoCsv() {
+
+        String caminhoArquivo = "src/test/resources/contas.csv";
+        Assertions.assertThrows(RuntimeException.class, () -> CsvUtil.converteCsvParaContas(caminhoArquivo));
+
+    }
+
 
     @Test
     void criaCsv() {
@@ -37,7 +46,7 @@ class CsvUtilTest {
         CsvUtil.criaCsv(contas);
         File file = new File("./sincronizacao-resultado.csv");
         Assertions.assertTrue(file.exists());
-        boolean delete = file.delete();
-        log.info("Excluindo arquivo csv de teste: {}", delete);
+        boolean isDelete = file.delete();
+        log.info("Excluindo arquivo csv de teste: {}", isDelete);
     }
 }
