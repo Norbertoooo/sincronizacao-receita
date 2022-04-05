@@ -29,7 +29,7 @@ public class CommandLineInit {
             if (Boolean.FALSE.equals(argumentos.isEmpty())) {
                 for (String argumento : argumentos) {
 
-                    List<Conta> contas = CsvUtil.converteCsv(argumento);
+                    List<Conta> contas = CsvUtil.converteCsvParaContas(argumento);
 
                     contas.forEach(conta -> {
                         try {

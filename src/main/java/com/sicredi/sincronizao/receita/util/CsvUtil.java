@@ -45,7 +45,7 @@ public class CsvUtil {
         }
     }
 
-    public static List<Conta> converteCsv(String caminhoArquivo) {
+    public static List<Conta> converteCsvParaContas(String caminhoArquivo) {
 
         try {
             Reader reader = new FileReader(caminhoArquivo);
